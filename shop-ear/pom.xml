@@ -1,0 +1,76 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.sego.shop</groupId>
+		<artifactId>shop-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>shop-ear</artifactId>
+	<packaging>ear</packaging>
+	
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.wildfly.plugins</groupId>
+					<artifactId>wildfly-maven-plugin</artifactId>
+					<version>1.0.2.Final</version>
+					<executions>
+						<execution>
+							<id>add-datasources</id>
+							<!-- 
+							<goals>
+								<goal>add-resource</goal>
+							</goals>
+							 -->
+							<configuration>
+								<address>subsystem=datasources,data-source=shopDS</address>
+								<resources>
+									<resource>
+										<properties>
+											<jndi-name>java:jboss/datasources/shopDs</jndi-name>
+											<enabled>true</enabled>
+											<connection-url>jdbc:h2:mem:test;DB_CLOSE_DELAY=-1</connection-url>
+											<driver-class>org.h2.Driver</driver-class>
+											<driver-name>h2</driver-name>
+											<user-name>sa</user-name>
+											<password>sa</password>
+										</properties>
+									</resource>
+								</resources>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+
+			<plugin>
+				<artifactId>maven-ear-plugin</artifactId>
+				<version>2.10</version>
+				<configuration>
+					<modules>
+						<webModule>
+							<groupId>com.sego.shop</groupId>
+							<artifactId>shop-web</artifactId>
+						</webModule>
+					</modules>
+				</configuration>
+			</plugin>
+
+		</plugins>
+
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.sego.shop</groupId>
+			<artifactId>shop-web</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>war</type>
+		</dependency>
+	</dependencies>
+</project>
