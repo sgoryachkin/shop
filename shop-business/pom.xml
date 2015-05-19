@@ -6,26 +6,8 @@
 		<artifactId>shop</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>shop-model</artifactId>
-	<build>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<compilerArguments>
-						<processor>org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor</processor>
-					</compilerArguments>
-				</configuration>
-				<dependencies>
-					<dependency>
-						<groupId>org.hibernate</groupId>
-						<artifactId>hibernate-jpamodelgen</artifactId>
-						<version>4.3.4.Final</version>
-					</dependency>
-				</dependencies>
-			</plugin>
-		</plugins>
-	</build>
+	<artifactId>shop-business</artifactId>
+	<packaging>ejb</packaging>
 	<dependencies>
 		<dependency>
 			<groupId>javax</groupId>
@@ -33,5 +15,25 @@
 			<version>7.0</version>
 			<scope>provided</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>com.sego.shop</groupId>
+			<artifactId>shop-model</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>4.3.10.Final</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
+
 </project>

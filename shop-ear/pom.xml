@@ -8,7 +8,7 @@
 	</parent>
 	<artifactId>shop-ear</artifactId>
 	<packaging>ear</packaging>
-	
+
 
 	<build>
 		<pluginManagement>
@@ -20,11 +20,7 @@
 					<executions>
 						<execution>
 							<id>add-datasources</id>
-							<!-- 
-							<goals>
-								<goal>add-resource</goal>
-							</goals>
-							 -->
+							<!-- <goals> <goal>add-resource</goal> </goals> -->
 							<configuration>
 								<address>subsystem=datasources,data-source=shopDS</address>
 								<resources>
@@ -47,7 +43,6 @@
 			</plugins>
 		</pluginManagement>
 		<plugins>
-
 			<plugin>
 				<artifactId>maven-ear-plugin</artifactId>
 				<version>2.10</version>
@@ -57,10 +52,13 @@
 							<groupId>com.sego.shop</groupId>
 							<artifactId>shop-web</artifactId>
 						</webModule>
+						<ejbModule>
+							<groupId>com.sego.shop</groupId>
+							<artifactId>shop-business</artifactId>
+						</ejbModule>
 					</modules>
 				</configuration>
 			</plugin>
-
 		</plugins>
 
 	</build>
@@ -71,6 +69,12 @@
 			<artifactId>shop-web</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>com.sego.shop</groupId>
+			<artifactId>shop-business</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>ejb</type>
 		</dependency>
 	</dependencies>
 </project>
