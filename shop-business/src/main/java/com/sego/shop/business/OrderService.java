@@ -1,12 +1,12 @@
 package com.sego.shop.business;
 
-import com.sego.shop.model.order.Order;
+import com.sego.shop.model.order.SalesOrder;
 
 
 
 public interface OrderService {
 	
-	Order createOrder();
+	SalesOrder createOrder();
 	
 	void save(Long id);
 

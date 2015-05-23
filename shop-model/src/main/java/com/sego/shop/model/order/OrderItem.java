@@ -5,6 +5,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import com.sego.shop.model.AbstractItem;
+import com.sego.shop.model.product.Product;
 
 @Entity
 public class OrderItem extends AbstractItem {
@@ -13,9 +14,14 @@ public class OrderItem extends AbstractItem {
 	private Long id;
 
 	@ManyToOne
-	private Order order;
+	private SalesOrder order;
+	
+	@ManyToOne
+	private Product product;
 
 	private int state;
+	
+
 
 	public Long getId() {
 		return id;
@@ -33,12 +39,20 @@ public class OrderItem extends AbstractItem {
 		this.state = state;
 	}
 	
-	public Order getOrder() {
+	public SalesOrder getOrder() {
 		return order;
 	}
 
-	public void setOrder(Order order) {
+	public void setOrder(SalesOrder order) {
 		this.order = order;
+	}
+
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
 	}
 
 }
