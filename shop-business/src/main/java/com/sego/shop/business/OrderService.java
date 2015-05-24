@@ -8,6 +8,8 @@ public interface OrderService {
 	
 	SalesOrder createOrder();
 	
+	SalesOrder getOrder(Long id);
+	
 	void save(Long id);
 
 }
