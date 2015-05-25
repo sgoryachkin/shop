@@ -1,39 +1,33 @@
 package com.sego.shop;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
+import javax.ejb.EJB;
 
-import org.junit.Before;
+import org.apache.openejb.junit.jee.EJBContainerRunner;
+import org.apache.openejb.junit.jee.transaction.Transaction;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.sego.shop.business.OrderService;
-import com.sego.shop.business.OrderServiceImpl;
 import com.sego.shop.model.order.SalesOrder;
 
+@RunWith(EJBContainerRunner.class)
 public class OrderServiceImplTest {
 
+	@EJB
 	private OrderService orderService;
-		
-	@Before
-	public void bootContainer() throws NamingException {
-		InitialContext ctx = new InitialContext();
-		orderService = (OrderService) ctx.lookup(OrderServiceImpl.class
-				.getSimpleName() + "Local");
+
+	@Test
+	@Transaction(rollback = true)
+	public void create1() {
+		SalesOrder order = orderService.createOrder();
+		System.out.println(order.getId());
 	}
 
 	@Test
-	public void test() {
+	@Transaction(rollback = true)
+	public void create2() {
 		SalesOrder order = orderService.createOrder();
 		System.out.println(order.getId());
-	}
-	
-	@Test
-	public void test2() {
-		SalesOrder order = orderService.createOrder();
-		System.out.println(order.getId());
-		SalesOrder order1 = orderService.getOrder(10l);
-		System.out.println(order1.getId());
-		
 	}
 
 }
