@@ -28,10 +28,6 @@ public class CopyOfOrderServiceImplTest {
 		orderService = (OrderService) ctx.lookup("java:global/classes/OrderServiceImpl");
 	}
 	
-
-
-
-	
 	@Test
 	public void create2() {
 		SalesOrder order = orderService.createSalesOrder();
