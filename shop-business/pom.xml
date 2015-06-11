@@ -8,6 +8,23 @@
 	</parent>
 	<artifactId>shop-business</artifactId>
 	<packaging>ejb</packaging>
+	<properties>
+		<arquillian-version>1.1.8.Final</arquillian-version>
+		<wildfly-version>8.2.0.Final</wildfly-version>
+		<javaee-server-home>/Java/wildfly-8.1.0.Final</javaee-server-home>
+	</properties>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.jboss.arquillian</groupId>
+				<artifactId>arquillian-bom</artifactId>
+				<version>${arquillian-version}</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
 		<dependency>
 			<groupId>javax</groupId>
@@ -34,18 +51,54 @@
 			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- <dependency> <groupId>org.jboss.arquillian</groupId> <artifactId>arquillian-bom</artifactId> 
+			<version>1.1.8.Final</version> <scope>import</scope> <type>pom</type> </dependency> -->
+		<!-- <dependency> <groupId>org.glassfish.main.extras</groupId> <artifactId>glassfish-embedded-all</artifactId> 
+			<version>4.1</version> <scope>test</scope> </dependency> <dependency> <groupId>org.glassfish.main.extras</groupId> 
+			<artifactId>glassfish-embedded-static-shell</artifactId> <version>4.1</version> 
+			<scope>test</scope> </dependency> -->
+
+
 		<dependency>
-			<groupId>org.apache.openejb</groupId>
-			<artifactId>openejb-core</artifactId>
-			<version>4.7.2</version>
+			<groupId>org.wildfly</groupId>
+			<artifactId>wildfly-embedded</artifactId>
+			<version>${wildfly-version}</version>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>jconsole</artifactId>
+					<groupId>sun.jdk</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.arquillian.junit</groupId>
+			<artifactId>arquillian-junit-container</artifactId>
+			<version>${arquillian-version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.openejb</groupId>
-			<artifactId>openejb-junit</artifactId>
-			<version>4.7.2</version>
+			<groupId>org.jboss.arquillian.extension</groupId>
+			<artifactId>arquillian-transaction-jta</artifactId>
+			<version>1.0.1.Final</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.wildfly</groupId>
+			<artifactId>wildfly-arquillian-container-embedded</artifactId>
+			<version>${wildfly-version}</version>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>jconsole</artifactId>
+					<groupId>sun.jdk</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- <dependency> <groupId>org.glassfish.packager</groupId> <artifactId>glassfish-ejb</artifactId> 
+			<version>3.2-b06</version> <scope>test</scope> </dependency> <dependency> 
+			<groupId>org.apache.openejb</groupId> <artifactId>openejb-junit</artifactId> 
+			<version>4.7.2</version> <scope>test</scope> </dependency> -->
 		<dependency>
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
@@ -59,9 +112,24 @@
 			<scope>test</scope>
 		</dependency>
 
-
-
-
 	</dependencies>
+	<build>
+	<plugins>
+	        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+                <argLine>-Dfile.encoding=UTF-8</argLine>
+                <forkCount>1C</forkCount>
+                <systemPropertyVariables>
+                    <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                    <jboss.home>${basedir}</jboss.home>
+                </systemPropertyVariables>
+                <redirectTestOutputToFile>false</redirectTestOutputToFile>
+            </configuration>
+        </plugin> 
+	</plugins>
+	
+	</build>
 
 </project>

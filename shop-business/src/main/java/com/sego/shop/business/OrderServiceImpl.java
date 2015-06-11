@@ -5,9 +5,11 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import javax.transaction.Transactional.TxType;
@@ -27,34 +29,51 @@ public class OrderServiceImpl implements OrderService {
 	private EntityManager em;
 	
 	@Override
-	public SalesOrder createOrder() {
+	public SalesOrder createSalesOrder() {
 		SalesOrder order = new SalesOrder();
 		em.persist(order);
 		return order;
 	}
 	
 	@Override
-	public SalesOrder getOrder(Long id) {
+	public OrderItem addTemporaryOrderItem(SalesOrder salesOrder) {
+		OrderItem orderItem = new OrderItem();
+		orderItem.setOrder(salesOrder);
+		em.persist(orderItem);
+		return orderItem;
+	}
+	
+	@Override
+	public SalesOrder getSalesOrder(Long id) {
 		return em.find(SalesOrder.class, id);
 	}
 	
-	public List<OrderItem> getChild(SalesOrder order, OrderItem parentOrderItem) {
+	@Override
+	public List<OrderItem> getTemporaryOrderItems(SalesOrder order, OrderItem parentOrderItem) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<OrderItem> cq = cb.createQuery(OrderItem.class);
 		Root<OrderItem> root = cq.from(OrderItem.class);
-	
-		cq = cq.where(cb.equal(root.get(OrderItem_.order), order));
+		
+		Expression<Boolean> exp1 = cb.equal(root.get(OrderItem_.order), order);
+		Expression<Boolean> exp2 = cb.equal(root.get(OrderItem_.permanent), false);
+		
+		cq = cq.where(cb.and(exp1, exp2));
 		return em.createQuery(cq).getResultList();
 	}
 
+
 	@Override
-	public void save(Long id) {
-		CriteriaBuilder cb = em.getCriteriaBuilder();
+	public void save(SalesOrder salesOrder) {
+		
+		for (OrderItem orderItem : getTemporaryOrderItems(salesOrder, null)) {
+			orderItem.setPermanent(true);
+		}
+/*		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaUpdate<OrderItem> cu = cb.createCriteriaUpdate(OrderItem.class);
 		Root<OrderItem> root = cu.from(OrderItem.class);
-		
-		cu.set(OrderItem_.state, 1).where(cb.equal(root.get(OrderItem_.state), 0));
-		em.createQuery(cu);
+		cu.set(OrderItem_.permanent, true).where(cb.equal(root.get(OrderItem_.order), salesOrder));
+		Query query = em.createQuery(cu);
+		query.executeUpdate();*/
 	}
 
 

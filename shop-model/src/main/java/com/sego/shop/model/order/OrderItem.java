@@ -1,16 +1,18 @@
 package com.sego.shop.model.order;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-import com.sego.shop.model.AbstractItem;
 import com.sego.shop.model.product.Product;
 
 @Entity
-public class OrderItem extends AbstractItem {
+public class OrderItem  {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
 
 	@ManyToOne
@@ -18,10 +20,9 @@ public class OrderItem extends AbstractItem {
 	
 	@ManyToOne
 	private Product product;
-
-	private int state;
 	
-
+	
+	private boolean permanent;
 
 	public Long getId() {
 		return id;
@@ -29,14 +30,6 @@ public class OrderItem extends AbstractItem {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public int isState() {
-		return state;
-	}
-
-	public void setState(int state) {
-		this.state = state;
 	}
 	
 	public SalesOrder getOrder() {
@@ -53,6 +46,14 @@ public class OrderItem extends AbstractItem {
 
 	public void setProduct(Product product) {
 		this.product = product;
+	}
+
+	public boolean isPermanent() {
+		return permanent;
+	}
+
+	public void setPermanent(boolean permanent) {
+		this.permanent = permanent;
 	}
 
 }
