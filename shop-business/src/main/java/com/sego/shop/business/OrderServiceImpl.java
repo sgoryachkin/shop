@@ -3,6 +3,8 @@ package com.sego.shop.business;
 import java.util.List;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -22,7 +24,7 @@ import com.sego.shop.model.order.SalesOrder;
  * Session Bean implementation class OrderService
  */
 @Stateless
-@Transactional(value = TxType.MANDATORY)
+@TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class OrderServiceImpl implements OrderService {
 
 	@PersistenceContext(unitName="shopPu")
@@ -64,16 +66,12 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public void save(SalesOrder salesOrder) {
-		
-		for (OrderItem orderItem : getTemporaryOrderItems(salesOrder, null)) {
-			orderItem.setPermanent(true);
-		}
-/*		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaUpdate<OrderItem> cu = cb.createCriteriaUpdate(OrderItem.class);
 		Root<OrderItem> root = cu.from(OrderItem.class);
 		cu.set(OrderItem_.permanent, true).where(cb.equal(root.get(OrderItem_.order), salesOrder));
 		Query query = em.createQuery(cu);
-		query.executeUpdate();*/
+		query.executeUpdate();
 	}
 
 
