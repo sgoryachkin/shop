@@ -39,5 +39,7 @@ public class CopyOfOrderServiceImplTest {
 		orderService.save(order);
 		list = orderService.getTemporaryOrderItems(order, null);
 		Assert.assertEquals(0, list.size());
+		list = orderService.getOrderItems(order, null);
+		Assert.assertEquals(30, list.size());
 	}
 }

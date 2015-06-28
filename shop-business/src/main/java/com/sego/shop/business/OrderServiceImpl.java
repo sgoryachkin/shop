@@ -60,6 +60,19 @@ public class OrderServiceImpl implements OrderService {
 		cq = cq.where(cb.and(exp1, exp2));
 		return em.createQuery(cq).getResultList();
 	}
+	
+	@Override
+	public List<OrderItem> getOrderItems(SalesOrder order, OrderItem parentOrderItem) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<OrderItem> cq = cb.createQuery(OrderItem.class);
+		Root<OrderItem> root = cq.from(OrderItem.class);
+		
+		Expression<Boolean> exp1 = cb.equal(root.get(OrderItem_.order), order);
+		Expression<Boolean> exp2 = cb.equal(root.get(OrderItem_.permanent), true);
+		
+		cq = cq.where(cb.and(exp1, exp2));
+		return em.createQuery(cq).getResultList();
+	}
 
 
 	@Override
@@ -71,6 +84,8 @@ public class OrderServiceImpl implements OrderService {
 		Query query = em.createQuery(cu);
 		query.executeUpdate();
 	}
+
+
 
 
 }

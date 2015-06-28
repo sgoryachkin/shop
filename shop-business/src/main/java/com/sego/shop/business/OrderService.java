@@ -20,6 +20,8 @@ public interface OrderService {
 	
 	List<OrderItem> getTemporaryOrderItems(SalesOrder salesOrder, OrderItem parentOrderItem);
 	
+	List<OrderItem> getOrderItems(SalesOrder order, OrderItem parentOrderItem);
+	
 	SalesOrder getSalesOrder(Long id);
 	
 	void save(SalesOrder salesOrder);
