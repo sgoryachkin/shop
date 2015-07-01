@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.sego.shop</groupId>
-    <artifactId>shop-parent</artifactId>
+    <artifactId>shop</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>shop-web</artifactId>
