@@ -2,32 +2,37 @@ package com.sego.shop;
 
 import java.util.List;
 
-import javax.ejb.EJB;
-import javax.ejb.embeddable.EJBContainer;
-import javax.naming.Context;
-import javax.naming.NamingException;
+import javax.inject.Inject;
 
+import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.asset.EmptyAsset;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.sego.shop.business.OrderService;
+import com.sego.shop.model.AbstractItem;
 import com.sego.shop.model.order.OrderItem;
 import com.sego.shop.model.order.SalesOrder;
 
-
+@RunWith(Arquillian.class)
 public class CopyOfOrderServiceImplTest {
 
-	@EJB
+	@Inject
 	private OrderService orderService;
-	
-	@Before
-	public void setup() throws NamingException {
-		EJBContainer container = EJBContainer.createEJBContainer();
-		Context ctx = container.getContext();
-		orderService = (OrderService) ctx.lookup("java:global/classes/OrderServiceImpl");
+
+	@Deployment
+	public static JavaArchive createDeployment() {
+		return ShrinkWrap.create(JavaArchive.class)
+				.addPackage(OrderService.class.getPackage())
+				.addPackages(true, AbstractItem.class.getPackage())
+				.addAsResource("META-INF/persistence.xml")
+				.addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
 	}
-	
+
 	@Test
 	public void create2() {
 		SalesOrder order = orderService.createSalesOrder();
