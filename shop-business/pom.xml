@@ -25,6 +25,13 @@
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>
+			<dependency>
+				<groupId>org.jboss.arquillian.extension</groupId>
+				<artifactId>arquillian-transaction-bom</artifactId>
+				<version>1.0.3.Final</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -63,11 +70,18 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.jboss.arquillian.extension</groupId>
+			<artifactId>arquillian-transaction-jta</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>org.wildfly</groupId>
 			<artifactId>wildfly-arquillian-container-embedded</artifactId>
 			<version>8.2.0.Final</version>
 			<scope>test</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>org.wildfly</groupId>
 			<artifactId>wildfly-embedded</artifactId>
@@ -86,7 +100,7 @@
 
 
 	</dependencies>
-	 
+
 	<build>
 		<plugins>
 			<plugin>
@@ -99,5 +113,5 @@
 				</configuration>
 			</plugin>
 		</plugins>
-	</build> 
+	</build>
 </project>
