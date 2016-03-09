@@ -3,18 +3,13 @@ package com.sego.shop;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.transaction.api.annotation.TransactionMode;
 import org.jboss.arquillian.transaction.api.annotation.Transactional;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
-//import org.apache.openejb.junit.jee.EJBContainerRunner;
-//import org.apache.openejb.junit.jee.transaction.Transaction;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,15 +31,15 @@ public class OrderServiceImplTest {
 		return ShrinkWrap.create(JavaArchive.class)
 				.addPackage(OrderService.class.getPackage())
 				.addPackages(true, AbstractItem.class.getPackage())
-				.addAsResource("META-INF/persistence.xml")
-				.addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
+				.addAsResource("META-INF/persistence.xml");
 	}
 
 	@Test
 	@Transactional(TransactionMode.ROLLBACK)
 	public void createSalesOrdr() {
 		SalesOrder order = orderService.createSalesOrder();
-		order = orderService.getSalesOrder(order.getId());
+		SalesOrder order2 = orderService.getSalesOrder(order.getId());
+		Assert.assertEquals(order.getId(), order2.getId());
 	}
 
 	@Test

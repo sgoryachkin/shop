@@ -45,11 +45,7 @@ public class OrderServiceImpl implements OrderService {
 	
 	@Override
 	public SalesOrder getSalesOrder(Long id) {
-		SalesOrder so = em.find(SalesOrder.class, id);
-		if (so == null) {
-			throw new IllegalStateException();
-		}
-		return so;
+		return em.getReference(SalesOrder.class, id);
 	}
 	
 	@Override
