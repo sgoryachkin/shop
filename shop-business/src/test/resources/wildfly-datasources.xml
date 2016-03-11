@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <subsystem xmlns="urn:jboss:domain:datasources:1.0">
 	<datasources>
 		<datasource jndi-name="java:jboss/datasources/ExampleDS"
