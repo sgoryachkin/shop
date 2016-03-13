@@ -11,14 +11,20 @@ public interface OrderService {
 	
 	SalesOrder createSalesOrder();
 	
-	OrderItem addTemporaryOrderItem(SalesOrder salesOrder);
+	OrderItem addTemporaryOrderItem(Long salesOrderId);
 	
-	List<OrderItem> getTemporaryOrderItems(SalesOrder salesOrder, OrderItem parentOrderItem);
+	OrderItem getTemporaryOrderItemForEdit(Long salesOrderId, Long orderItemId);
 	
-	List<OrderItem> getOrderItems(SalesOrder order, OrderItem parentOrderItem);
+	SalesOrder getTemporarySalesOrderForEdit(Long salesOrderId);
+	
+	List<OrderItem> getTemporaryOrderItems(Long salesOrderId, OrderItem parentOrderItem);
+	
+	List<OrderItem> getOrderItems(Long salesOrderId, OrderItem parentOrderItem);
 	
 	SalesOrder getSalesOrder(Long id);
 	
-	void save(SalesOrder salesOrder);
+	void save(Long salesOrderId);
+	
+	void submit(Long salesOrderId);
 
 }

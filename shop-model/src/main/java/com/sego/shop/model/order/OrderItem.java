@@ -1,5 +1,8 @@
 package com.sego.shop.model.order;
 
+import java.io.Serializable;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,35 +12,31 @@ import javax.persistence.ManyToOne;
 import com.sego.shop.model.product.Product;
 
 @Entity
-public class OrderItem  {
+public class OrderItem implements Serializable {
+	private static final long serialVersionUID = 8083623572996661549L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
+	
+	@Id 
+	private PermanentState permanentState = PermanentState.UNSAVED;
 
-	@ManyToOne
-	private SalesOrder order;
+	@Column
+	private Long salsOrderId;
+	
+	@Column
+	private String name;
 	
 	@ManyToOne
 	private Product product;
 	
-	
-	private boolean permanent;
-
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-	
-	public SalesOrder getOrder() {
-		return order;
-	}
-
-	public void setOrder(SalesOrder order) {
-		this.order = order;
 	}
 
 	public Product getProduct() {
@@ -48,12 +47,29 @@ public class OrderItem  {
 		this.product = product;
 	}
 
-	public boolean isPermanent() {
-		return permanent;
+	public PermanentState getPermanentState() {
+		return permanentState;
 	}
 
-	public void setPermanent(boolean permanent) {
-		this.permanent = permanent;
+	public void setPermanentState(PermanentState permanentState) {
+		this.permanentState = permanentState;
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Long getSalsOrderId() {
+		return salsOrderId;
+	}
+
+	public void setSalsOrderId(Long salsOrderId) {
+		this.salsOrderId = salsOrderId;
+	}
+
 
 }
