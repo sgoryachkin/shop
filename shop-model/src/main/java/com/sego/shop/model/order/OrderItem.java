@@ -17,10 +17,15 @@ public class OrderItem implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@Column(nullable = false)
 	private Long id;
 	
 	@Id 
+	@Column(nullable = false)
 	private PermanentState permanentState = PermanentState.UNSAVED;
+	
+	@Column(nullable = false)
+	private boolean inEdit = true;
 
 	@Column
 	private Long salsOrderId;
@@ -69,6 +74,14 @@ public class OrderItem implements Serializable {
 
 	public void setSalsOrderId(Long salsOrderId) {
 		this.salsOrderId = salsOrderId;
+	}
+
+	public boolean isInEdit() {
+		return inEdit;
+	}
+
+	public void setInEdit(boolean inEdit) {
+		this.inEdit = inEdit;
 	}
 
 

@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Expression;
@@ -26,7 +27,7 @@ import com.sego.shop.model.order.SalesOrder_;
  */
 @Stateless
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
-public class OrderServiceImpl implements OrderService {
+public class EditSalesOrderServiceImpl implements EditSalesOrderService {
 
 	@PersistenceContext(unitName = "shopPu")
 	private EntityManager em;
@@ -86,7 +87,11 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	private OrderItem createUnsavedClone(OrderItem orderItem) {
+		//Long salesOrderId = orderItem.getId();
+		orderItem.setInEdit(true);
+		em.flush();
 		em.detach(orderItem);
+		orderItem.setInEdit(false);
 		orderItem.setPermanentState(PermanentState.UNSAVED);
 		em.persist(orderItem);
 		return orderItem;
@@ -134,11 +139,25 @@ public class OrderServiceImpl implements OrderService {
 	public void save(Long salesOrderId) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaUpdate<OrderItem> cu = cb.createCriteriaUpdate(OrderItem.class);
+		CriteriaDelete<OrderItem> cd = cb.createCriteriaDelete(OrderItem.class);
 		Root<OrderItem> root = cu.from(OrderItem.class);
-		cu.set(OrderItem_.permanentState, PermanentState.SAVED)
-				.where(cb.equal(root.get(OrderItem_.salsOrderId), salesOrderId));
+		Root<OrderItem> rootd = cd.from(OrderItem.class);
+		//Join<OrderItem, Long> rootdJoin = rootd.join(OrderItem_.id);
+		
+		
+		Predicate unsavedPredicate = cb.equal(root.get(OrderItem_.permanentState), PermanentState.UNSAVED);
+		Predicate salesOrderPredicate = cb.equal(root.get(OrderItem_.salsOrderId), salesOrderId);
+		Predicate salesOrderPredicated = cb.equal(rootd.get(OrderItem_.salsOrderId), salesOrderId);
+		Predicate savedPredicate = cb.equal(rootd.get(OrderItem_.permanentState), PermanentState.SAVED);
+		Predicate inEdit = cb.equal(rootd.get(OrderItem_.inEdit), true);
+		
+		cu.set(OrderItem_.permanentState, PermanentState.SAVED).set(OrderItem_.inEdit, false).where(cb.and(unsavedPredicate, salesOrderPredicate));
+		cd.where(cb.and(inEdit, savedPredicate, salesOrderPredicated));
 		Query query = em.createQuery(cu);
-		query.executeUpdate();
+		Query queryd = em.createQuery(cd);
+		System.out.println(queryd.executeUpdate());
+		System.out.println(query.executeUpdate());
+		
 		//salesOrder.setPermanentState(PermanentState.SAVED);
 	}
 

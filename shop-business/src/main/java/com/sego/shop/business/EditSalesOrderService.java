@@ -7,7 +7,13 @@ import com.sego.shop.model.order.SalesOrder;
 
 
 
-public interface OrderService {
+/**
+ * Edit SalesOrder service
+ * 
+ * @author sego
+ *
+ */
+public interface EditSalesOrderService {
 	
 	SalesOrder createSalesOrder();
 	
@@ -21,7 +27,7 @@ public interface OrderService {
 	
 	List<OrderItem> getOrderItems(Long salesOrderId, OrderItem parentOrderItem);
 	
-	SalesOrder getSalesOrder(Long id);
+	SalesOrder getSalesOrder(Long salesOrderId);
 	
 	void save(Long salesOrderId);
 	

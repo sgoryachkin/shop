@@ -14,23 +14,22 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.sego.shop.business.OrderService;
+import com.sego.shop.business.EditSalesOrderService;
 import com.sego.shop.model.AbstractItem;
 import com.sego.shop.model.order.OrderItem;
-import com.sego.shop.model.order.PermanentState;
 import com.sego.shop.model.order.SalesOrder;
 
 @RunWith(Arquillian.class)
 @Transactional(TransactionMode.ROLLBACK)
-public class OrderServiceImplTest {
+public class EditSalesOrderServiceImplTest {
 
 	@Inject
-	private OrderService orderService;
+	private EditSalesOrderService orderService;
 	
 	@Deployment
 	public static JavaArchive createDeployment() {
 		return ShrinkWrap.create(JavaArchive.class)
-				.addPackage(OrderService.class.getPackage())
+				.addPackage(EditSalesOrderService.class.getPackage())
 				.addPackages(true, AbstractItem.class.getPackage())
 				.addAsResource("META-INF/persistence.xml");
 	}
@@ -48,11 +47,32 @@ public class OrderServiceImplTest {
 	public void save() {
 		SalesOrder order = orderService.createSalesOrder();
 		for (int i = 0; i < 30; i++) {
-			orderService.addTemporaryOrderItem(order.getId());
+			OrderItem orderItem = orderService.addTemporaryOrderItem(order.getId());
+			orderService.getTemporaryOrderItemForEdit(order.getId(), orderItem.getId());
 		}
 		List<OrderItem> list = orderService.getTemporaryOrderItems(order.getId(), null);
 		Assert.assertEquals(30, list.size());
 		orderService.save(order.getId());
+		list = orderService.getTemporaryOrderItems(order.getId(), null);
+		Assert.assertEquals(0, list.size());
+		list = orderService.getOrderItems(order.getId(), null);
+		Assert.assertEquals(30, list.size());
+		
+		SalesOrder salesOrder2 = orderService.getTemporarySalesOrderForEdit(order.getId());
+		int i = 0;
+		for (OrderItem orderItem : orderService.getOrderItems(order.getId(), null)) {
+			if (i++ % 2 == 0) {
+			OrderItem orderItemEdit = orderService.getTemporaryOrderItemForEdit(order.getId(), orderItem.getId());
+			orderItemEdit.setName("Name #" + orderItem.getId());
+			}
+		}
+		list = orderService.getTemporaryOrderItems(order.getId(), null);
+		Assert.assertEquals(15, list.size());
+		list = orderService.getOrderItems(order.getId(), null);
+		Assert.assertEquals(30, list.size());
+		
+		orderService.save(order.getId());
+		
 		list = orderService.getTemporaryOrderItems(order.getId(), null);
 		Assert.assertEquals(0, list.size());
 		list = orderService.getOrderItems(order.getId(), null);
